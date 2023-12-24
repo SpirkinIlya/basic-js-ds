@@ -41,9 +41,7 @@ function removeKFromList(l, k) {
       currentNode = currentNode.next;
     }
   }
- 
   return l;
-  // remove line with error and write your code here
 }
 
 module.exports = {
