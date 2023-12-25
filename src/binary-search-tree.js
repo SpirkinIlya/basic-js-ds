@@ -100,32 +100,68 @@ class BinarySearchTree {
     if (!this.rootNode) {
       return;
     }
-    //delete data from root
-    if (this.rootNode.data === data) {
-      let leftNode = this.rootNode.left;
-      let rightNode = this.rootNode.right;
-      if (leftNode) {
-        this.rootNode = leftNode;
-      }else {
-        this.rootNode = rightNode;
+
+    let currentNode = this.rootNode;
+    let parentNode = null;
+    //searching for node with Node.data === data
+    while (currentNode){
+      if (data > currentNode.data) {
+        parentNode = currentNode;
+        currentNode = currentNode.right;
+      }else if (data < currentNode.data) {
+        parentNode = currentNode;
+        currentNode = currentNode.left;
+      } else {
+        break;
       }
-      return;
     }
-    let nextNode;
-    let movement = '';
-    if (data > currentNode.data) {
-      nextNode = currentNode.right;
-      movement = 'right';
-    }else {
-      nextNode = currentNode.left;
-      movement = 'left';
-    }
-    /*while (nextNode) {
-      if (data === nextNode.data) {
-        
+    //if we found Node
+    if (currentNode) {
+      //Our Node has no child Nodes
+      if (currentNode.left === null && currentNode.right === null) {
+        if (parentNode) {
+          if (parentNode.left === currentNode) {
+            parentNode.left = null;
+          }else {
+            parentNode.right = null;
+          }
+        }else {
+          this.rootNode = null; //if we trying to delete rootNode
+        }
+      }else if (currentNode.left === null) { //our Node has one child Node on Right side
+        if (parentNode) {
+          if (parentNode.left === currentNode) {
+            parentNode.left = currentNode.right;
+          }else {
+            parentNode.right = currentNode.right;
+          }
+        }else {
+          this.rootNode = currentNode.right; //if we trying to delete rootNode
+        }
+      }else if (currentNode.right === null) { //our Node has one child Node on Left side
+        if (parentNode) {
+          if (parentNode.left === currentNode) {
+            parentNode.left = currentNode.left;
+          }else {
+            parentNode.right = currentNode.left;
+          }
+        }else {
+          this.rootNode = currentNode.left; //if we are tryin to delete rootNode
+        }
+      }else { //our Node has two child Nodes
+        let minNode = this.findMinNode(currentNode.right);
+        this.remove(minNode.data);
+        currentNode.data = minNode.data;
       }
-    }*/
-    // remove line with error and write your code here
+    }
+  }
+
+  findMinNode(node) {
+    let currentNode = node;
+    while (currentNode.left) {
+      currentNode = currentNode.left;
+    }
+    return currentNode;
   }
 
   min() {
